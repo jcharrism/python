@@ -1,4 +1,3 @@
-Para solucionar el problema de rendimiento relacionado con el tamaño de las imágenes, podemos crear un Cloudflare Worker que redimensione y almacene en caché las imágenes. A continuación se muestra un ejemplo de cómo hacerlo.
 
 Crear un Cloudflare Worker para Redimensionar y Almacenar en Caché Imágenes
 
