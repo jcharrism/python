@@ -1,5 +1,3 @@
-Para crear un diagrama de observabilidad usando herramientas de Cloudflare y otras herramientas de monitoreo y logging, aquí tienes una descripción detallada y un diagrama representando los componentes clave y sus interacciones.
-
 
 Descripción del Diagrama
 Usuarios y Clientes: Interactúan con la aplicación a través de Internet.
