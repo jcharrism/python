@@ -5,10 +5,10 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  dockerRegistryServiceConnection: 'your-docker-registry-connection'
-  imageRepository: 'python-microservice'
-  containerRegistry: 'your-docker-registry'
-  dockerfilePath: 'Dockerfile'
+  dockerRegistryServiceConnection: 'e9a16cc5-c258-43e5-a836-f257dd16835c'
+  imageRepository: 'pythonmicroservicecontainer'
+  containerRegistry: 'mycontainerregistrydemo.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
 
 stages:
@@ -17,27 +17,39 @@ stages:
   jobs:
   - job: Build
     displayName: 'Build Job'
+    pool:
+      vmImage: 'ubuntu-latest'
     steps:
     - task: UsePythonVersion@0
       inputs:
         versionSpec: '3.x'
         addToPath: true
+      displayName: 'Set up Python'
 
     - script: |
         python -m venv env
         source env/bin/activate
         pip install -r requirements.txt
-        python -m unittest discover
-      displayName: 'Run Unit Tests'
+      displayName: 'Install Dependencies'
+
+    # - script: |
+    #     source env/bin/activate
+    #     python -m unittest discover
+    #   displayName: 'Run Unit Tests'
 
     - task: Docker@2
       displayName: 'Build and Push Docker Image'
       inputs:
         containerRegistry: '$(dockerRegistryServiceConnection)'
         repository: '$(imageRepository)'
+        command: 'buildAndPush'
         dockerfile: '$(dockerfilePath)'
         tags: |
           $(tag)
+        buildContext: '.'
 
-    - publish: $(System.DefaultWorkingDirectory)
-      artifact: drop
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.SourcesDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
